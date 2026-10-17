@@ -661,7 +661,7 @@ html.intro-lock, html.intro-lock body { overflow: hidden; }
 
   function resize() {
     dpr = Math.min(devicePixelRatio || 1, 1.5);
-    W = Math.round(innerWidth * dpr); H = Math.round(innerHeight * dpr);
+    W = Math.max(1, Math.round(innerWidth * dpr)); H = Math.max(1, Math.round(innerHeight * dpr));   // never 0 — a hidden tab can report it
     canvas.width = W; canvas.height = H;
     vignette = mk(W, H); const v = vignette.getContext('2d');
     const g = v.createRadialGradient(W / 2, H / 2, Math.min(W, H) * 0.35, W / 2, H / 2, Math.hypot(W, H) * 0.62);
@@ -788,6 +788,8 @@ html.intro-lock, html.intro-lock body { overflow: hidden; }
     setTimeout(() => el.remove(), 1200);
   }
   const onKey = (e) => { if (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ') finish(); };
+  // safety net: whatever happens to the reel, the site is never left behind it
+  setTimeout(finish, (T.end + 4) * 1000);
   document.getElementById('introSkip').addEventListener('click', finish);
   addEventListener('keydown', onKey);
 
