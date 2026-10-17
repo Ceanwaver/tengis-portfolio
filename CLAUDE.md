@@ -12,4 +12,6 @@ Single-file portfolio site: everything (HTML, CSS, JS, base64 photo) lives in `i
 
 Preview: open `index.html` in a browser, or run `npx serve .`
 
+Live at https://cean.space — GitHub Pages from `Ceanwaver/tengis-portfolio` (branch `main`, root). Pushing to `main` redeploys in about a minute. DNS is at Spaceship (4 A records to GitHub Pages + `www` CNAME to `ceanwaver.github.io`).
+
 Originally published as a Claude artifact: https://claude.ai/artifact/R6kGEV1E9qfL7qCxUtBPBP
