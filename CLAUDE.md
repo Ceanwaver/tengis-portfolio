@@ -3,7 +3,7 @@
 Single-file portfolio site: everything (HTML, CSS, JS, base64 photo) lives in `index.html` — except case-study images, which load lazily from `assets/<project>/` (Kuul: phone screens as PNG resized from `kuul-mockups/`, wordmark and app-icon SVGs from the Kuul brand folder; Tino: the user's screens in `assets/Tino/<service>/`, resized for the web into `assets/Tino/web/`, plus 3D icons from `~/Documents/Tino/Tino-3D-ICONS/Final Version` in `assets/Tino/web/icons/`).
 
 - Concept: a crate of vinyl records, inspired by https://a24.raviklaassens.com/ — every project is a bare 3D vinyl record (no sleeve), currently pressed in its brand colour. No intro; the work is the first screen.
-- Tab: "CEAN (Tengis Ulzii)" with a "Cn." icon (bold white Geist on black, drawn on a canvas so it uses the site font): `favicon-64.png` and the 180 px `apple-touch-icon.png`.
+- Tab: "CEAN (Tengis Ulzii)" with a "Cn." icon in bold Geist (drawn on a canvas, since a favicon can't load web fonts): `favicon.svg` is just the letters, filling the icon, and holds a black and a white PNG switched by `prefers-color-scheme`; `favicon-64.png` (white on a black tile) is the fallback for browsers without SVG icons, and the 180 px `apple-touch-icon.png` is for the iPhone home screen.
 - Style: clean and modern, light mode by default (`data-theme="light"`), optional dark (`data-theme="dark"`, remembered in localStorage).
 - Fonts: Instrument Serif (titles), Geist (text), Geist Mono (labels) via Google Fonts.
 - Crate (`#work`): a sticky stage. A port of A24's disc gallery (https://a24.raviklaassens.com/), read from their source; the constants below are A24's.
