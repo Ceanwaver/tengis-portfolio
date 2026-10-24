@@ -1,0 +1,103 @@
+{
+ "out": "/Users/oceanulzi/Documents/Personal Claude/tengis-portfolio/assets/Tino/web/phones",
+ "jobs": [
+  {
+   "src": "/Users/oceanulzi/Documents/Personal Claude/tengis-portfolio/assets/Tino/Onboarding/Splash-2.png",
+   "name": "splash-2"
+  },
+  {
+   "src": "/Users/oceanulzi/Documents/Personal Claude/tengis-portfolio/assets/Tino/Home.png",
+   "name": "home"
+  },
+  {
+   "src": "/Users/oceanulzi/Documents/Personal Claude/tengis-portfolio/assets/Tino/Onboarding/Login.png",
+   "name": "login"
+  },
+  {
+   "src": "/Users/oceanulzi/Documents/Personal Claude/tengis-portfolio/assets/Tino/Charge/Scanner-IOS.png",
+   "name": "charge-scanner-ios"
+  },
+  {
+   "src": "/Users/oceanulzi/Documents/Personal Claude/tengis-portfolio/assets/Tino/Charge/Charge-Map-Expanded.png",
+   "name": "charge-charge-map-expanded"
+  },
+  {
+   "src": "/Users/oceanulzi/Documents/Personal Claude/tengis-portfolio/assets/Tino/Fridge/Onboarding-1.png",
+   "name": "fridge-onboarding-1"
+  },
+  {
+   "src": "/Users/oceanulzi/Documents/Personal Claude/tengis-portfolio/assets/Tino/Fridge/Fridge-Open.png",
+   "name": "fridge-fridge-open"
+  },
+  {
+   "src": "/Users/oceanulzi/Documents/Personal Claude/tengis-portfolio/assets/Tino/Fridge/Merch-Detail.png",
+   "name": "fridge-merch-detail"
+  },
+  {
+   "src": "/Users/oceanulzi/Documents/Personal Claude/tengis-portfolio/assets/Tino/Nba Fantasy/Onboard.png",
+   "name": "nba-fantasy-onboard"
+  },
+  {
+   "src": "/Users/oceanulzi/Documents/Personal Claude/tengis-portfolio/assets/Tino/Nba Fantasy/League-Room.png",
+   "name": "nba-fantasy-league-room"
+  },
+  {
+   "src": "/Users/oceanulzi/Documents/Personal Claude/tengis-portfolio/assets/Tino/Nba Fantasy/Draft-Room-Not-Full.png",
+   "name": "nba-fantasy-draft-room-not-full"
+  },
+  {
+   "src": "/Users/oceanulzi/Documents/Personal Claude/tengis-portfolio/assets/Tino/Lottery/Lottery.png",
+   "name": "lottery-lottery"
+  },
+  {
+   "src": "/Users/oceanulzi/Documents/Personal Claude/tengis-portfolio/assets/Tino/Lottery/Screen 2 - Campaign Detail.png",
+   "name": "lottery-screen-2---campaign-detail"
+  },
+  {
+   "src": "/Users/oceanulzi/Documents/Personal Claude/tengis-portfolio/assets/Tino/Lottery/Transfer.png",
+   "name": "lottery-transfer"
+  },
+  {
+   "src": "/Users/oceanulzi/Documents/Personal Claude/tengis-portfolio/assets/Tino/Teen/Welcome-To-Teen.png",
+   "name": "teen-welcome-to-teen"
+  },
+  {
+   "src": "/Users/oceanulzi/Documents/Personal Claude/tengis-portfolio/assets/Tino/Teen/Child-Profile.png",
+   "name": "teen-child-profile"
+  },
+  {
+   "src": "/Users/oceanulzi/Documents/Personal Claude/tengis-portfolio/assets/Tino/Teen/Child-Services.png",
+   "name": "teen-child-services"
+  },
+  {
+   "src": "/Users/oceanulzi/Documents/Personal Claude/tengis-portfolio/assets/Tino/COP-17/Home-Pre.png",
+   "name": "cop-home-pre"
+  },
+  {
+   "src": "/Users/oceanulzi/Documents/Personal Claude/tengis-portfolio/assets/Tino/COP-17/Programme.png",
+   "name": "cop-programme"
+  },
+  {
+   "src": "/Users/oceanulzi/Documents/Personal Claude/tengis-portfolio/assets/Tino/COP-17/Map-Venue.png",
+   "name": "cop-map-venue"
+  }
+ ],
+ "res": [
+  1280,
+  1780
+ ],
+ "samples": 128,
+ "shadow": true,
+ "format": "WEBP",
+ "quality": 86,
+ "preview": false,
+ "dist": 0.5,
+ "lean": 5,
+ "yaw": 0,
+ "aim_x": 0.006,
+ "world": 0.22,
+ "lights": {
+  "sheen": 0.0,
+  "fill": 0.0
+ }
+}

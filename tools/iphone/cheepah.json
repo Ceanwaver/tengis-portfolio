@@ -1,0 +1,56 @@
+{
+ "out": "/Users/oceanulzi/Documents/Personal Claude/tengis-portfolio/assets/Cheepah/web/phones",
+ "jobs": [
+  {
+   "src": "/Users/oceanulzi/Documents/Personal Claude/tengis-portfolio/assets/Cheepah/Home.png",
+   "name": "home"
+  },
+  {
+   "src": "/Users/oceanulzi/Documents/Personal Claude/tengis-portfolio/assets/Cheepah/Search.png",
+   "name": "search"
+  },
+  {
+   "src": "/Users/oceanulzi/Documents/Personal Claude/tengis-portfolio/assets/Cheepah/Product Detail.png",
+   "name": "product-detail"
+  },
+  {
+   "src": "/Users/oceanulzi/Documents/Personal Claude/tengis-portfolio/assets/Cheepah/Cart.png",
+   "name": "cart"
+  },
+  {
+   "src": "/Users/oceanulzi/Documents/Personal Claude/tengis-portfolio/assets/Cheepah/Order Detail.png",
+   "name": "order-detail"
+  },
+  {
+   "src": "/Users/oceanulzi/Documents/Personal Claude/tengis-portfolio/assets/Cheepah/Wallet.png",
+   "name": "wallet"
+  },
+  {
+   "src": "/Users/oceanulzi/Documents/Personal Claude/tengis-portfolio/assets/Cheepah/Dark Wallet.png",
+   "name": "dark-wallet"
+  },
+  {
+   "src": "/Users/oceanulzi/Documents/Personal Claude/tengis-portfolio/assets/Cheepah/Dark Chat.png",
+   "name": "dark-chat"
+  }
+ ],
+ "res": [
+  1280,
+  1780
+ ],
+ "samples": 128,
+ "shadow": false,
+ "format": "WEBP",
+ "quality": 86,
+ "preview": false,
+ "dist": 0.5,
+ "lean": 5,
+ "yaw": 0,
+ "aim_x": 0.006,
+ "world": 0.22,
+ "lights": {
+  "sheen": 0.0,
+  "fill": 0.0
+ },
+ "island": true
+}

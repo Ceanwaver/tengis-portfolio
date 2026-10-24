@@ -1,2 +1,8 @@
 .claude/
 .DS_Store
+
+# design originals stay local; the site only loads the web versions
+assets/*/*
+!assets/*/web/
+!assets/kuul/*
+assets/kuul/kuul-mockups/
