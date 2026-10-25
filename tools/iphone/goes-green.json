@@ -1,0 +1,72 @@
+{
+ "out": "/Users/oceanulzi/Documents/Personal Claude/tengis-portfolio/assets/Goes Green/web/phones",
+ "jobs": [
+  {
+   "src": "/Users/oceanulzi/Documents/Personal Claude/tengis-portfolio/assets/Goes Green/On-Board-1.png",
+   "name": "onboarding"
+  },
+  {
+   "src": "/Users/oceanulzi/Documents/Personal Claude/tengis-portfolio/assets/Goes Green/Home-V1.png",
+   "name": "home"
+  },
+  {
+   "src": "/Users/oceanulzi/Documents/Personal Claude/tengis-portfolio/assets/Goes Green/Tree-1.png",
+   "name": "tree"
+  },
+  {
+   "src": "/Users/oceanulzi/Documents/Personal Claude/tengis-portfolio/assets/Goes Green/Tree.png",
+   "name": "trees"
+  },
+  {
+   "src": "/Users/oceanulzi/Documents/Personal Claude/tengis-portfolio/assets/Goes Green/Tree-Dead.png",
+   "name": "tree-dead"
+  },
+  {
+   "src": "/Users/oceanulzi/Documents/Personal Claude/tengis-portfolio/assets/Goes Green/Land-Detail.png",
+   "name": "land"
+  },
+  {
+   "src": "/Users/oceanulzi/Documents/Personal Claude/tengis-portfolio/assets/Goes Green/Stats-OT stats.png",
+   "name": "stats"
+  },
+  {
+   "src": "/Users/oceanulzi/Documents/Personal Claude/tengis-portfolio/assets/Goes Green/Profile-Badge-History.png",
+   "name": "points"
+  },
+  {
+   "src": "/Users/oceanulzi/Documents/Personal Claude/tengis-portfolio/assets/Goes Green/Product-List.png",
+   "name": "shop"
+  },
+  {
+   "src": "/Users/oceanulzi/Documents/Personal Claude/tengis-portfolio/assets/Goes Green/Product-Detail.png",
+   "name": "shop-item"
+  },
+  {
+   "src": "/Users/oceanulzi/Documents/Personal Claude/tengis-portfolio/assets/Goes Green/Нийтлэлүүд/Detail.png",
+   "name": "article"
+  },
+  {
+   "src": "/Users/oceanulzi/Documents/Personal Claude/tengis-portfolio/assets/Goes Green/Tree/Detail.png",
+   "name": "tree-type"
+  }
+ ],
+ "res": [
+  1280,
+  1780
+ ],
+ "samples": 128,
+ "shadow": false,
+ "format": "WEBP",
+ "quality": 86,
+ "preview": false,
+ "dist": 0.5,
+ "lean": 5,
+ "yaw": 0,
+ "aim_x": 0.006,
+ "world": 0.22,
+ "lights": {
+  "sheen": 0.0,
+  "fill": 0.0
+ },
+ "island": true
+}

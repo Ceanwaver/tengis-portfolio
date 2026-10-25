@@ -5,4 +5,8 @@
 assets/*/*
 !assets/*/web/
 !assets/kuul/*
+!assets/sfx/*
 assets/kuul/kuul-mockups/
+
+# Instagram stories, not part of the site
+story-*.png

@@ -1,0 +1,40 @@
+{
+ "out": "/Users/oceanulzi/Documents/Personal Claude/tengis-portfolio/assets/Goes Green/web/phones",
+ "jobs": [
+  {
+   "src": "/Users/oceanulzi/Documents/Personal Claude/tengis-portfolio/assets/Goes Green/Old Design/1. Onboarding- Welcome.png",
+   "name": "old-onboarding"
+  },
+  {
+   "src": "/Users/oceanulzi/Documents/Personal Claude/tengis-portfolio/assets/Goes Green/Old Design/5. Home page.png",
+   "name": "old-home"
+  },
+  {
+   "src": "/Users/oceanulzi/Documents/Personal Claude/tengis-portfolio/assets/Goes Green/Old Design/13. Shop.png",
+   "name": "old-shop"
+  },
+  {
+   "src": "/Users/oceanulzi/Documents/Personal Claude/tengis-portfolio/assets/Goes Green/Old Design/14. Shop detail.png",
+   "name": "old-shop-item"
+  }
+ ],
+ "res": [
+  1280,
+  1780
+ ],
+ "samples": 128,
+ "shadow": false,
+ "format": "WEBP",
+ "quality": 86,
+ "preview": false,
+ "dist": 0.5,
+ "lean": 5,
+ "yaw": 0,
+ "aim_x": 0.006,
+ "world": 0.22,
+ "lights": {
+  "sheen": 0.0,
+  "fill": 0.0
+ },
+ "island": true
+}
