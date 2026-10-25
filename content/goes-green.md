@@ -2,16 +2,15 @@
 
 ## Credits
 
-- **Role:** [UI/UX designer]
-- **Year:** [year]
-- **Platform:** [iOS · Android]
-- **Team:** [Team / company] · for Oyu Tolgoi
+- **Role:** UI/UX designer (solo)
+- **Year:** 2024
+- **Platform:** iOS · Android
 - **Category:** App Design
 
 ## Key results
 
 - **Built for:** Oyu Tolgoi's employees
-- **Result:** [Number of trees planted, or employees taking part]
+- **Employees:** 500 taking part
 
 ## Summary
 
@@ -34,9 +33,8 @@ Planting a tree is the easy part; keeping it alive is the hard part, especially 
 
 ## My role
 
-- Designed the app end to end: onboarding, home, trees and lands, the care log, statistics, points and ranks, the shop and articles.
-- [Created the visual style and the design system for the app.]
-- [Worked with the team and Oyu Tolgoi to shape the product.]
+- Designed the app on my own, end to end: onboarding, home, trees and lands, the care log, statistics, points and ranks, the shop and articles.
+- Created the visual style and the design system for the app.
 
 ## The challenge
 
@@ -53,4 +51,4 @@ The first version mixed teal, orange and green on heavy gradient cards. The rede
 ## Outcome
 
 - A tree-care app that keeps Oyu Tolgoi's employees connected to the trees they planted.
-- [A result: trees planted, employees taking part, survival rate, or feedback]
+- 500 employees taking part, each looking after the trees they planted.
