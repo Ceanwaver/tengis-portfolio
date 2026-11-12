@@ -3,7 +3,7 @@
 ## Credits
 
 - **Role:** Product designer & UI/UX teacher
-- **Year:** 2022 — 23
+- **Year:** 2022 — 2023
 - **Platform:** Web · Education
 - **Team:** Pinecone Studio
 - **Category:** Web Design & Education

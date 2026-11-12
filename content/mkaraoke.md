@@ -3,7 +3,7 @@
 ## Credits
 
 - **Role:** UI/UX designer
-- **Year:** 2022 — 23
+- **Year:** 2022 — 2023
 - **Platform:** Smart TV
 - **Team:** Pinecone Studio
 - **Category:** TV Design
