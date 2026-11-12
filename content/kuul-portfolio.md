@@ -1,6 +1,6 @@
 # Kuul — the campus app for Mongolian university students
 
-**Co-Founder & Chief Design Officer** · [2025 – present] · iOS & Android · [kuul.mn](https://kuul.mn)
+**Co-Founder & Chief Design Officer** · 2026 – present · iOS & Android · [kuul.mn](https://kuul.mn)
 
 > Anything in [brackets] is a placeholder. Fill it in with real facts or delete it.
 
@@ -41,8 +41,7 @@ As co-founder and CDO I own the product's design end to end: the brand, the desi
 
 ## Outcome
 
-- [Launched at X universities, date]
-- [N students signed up / N weekly active]
+- Stay tuned to find out some kuul sh*
 - [A retention or engagement number, or a quote from a student]
 
 ---

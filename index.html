@@ -377,6 +377,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   .results { bottom: 64px; left: var(--pad); right: var(--pad); transform: none; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
   .result { max-width: none; }
   .result__value { font-size: 15px; }
+  .results > :only-child { grid-column: 1 / -1; }   /* a single result spans both columns */
   .stage__intro { display: none; }
   .about__grid { grid-template-columns: 1fr; }
   .detail__head { bottom: 9vh; }
@@ -478,8 +479,9 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
         <div class="lists">
           <div class="list">
             <span class="label list__label">Experience</span>
-            <div class="list__item"><span>Kuul — founder &amp; designer</span><span>[year] —</span></div>
+            <div class="list__item"><span>Kuul — founder &amp; designer</span><span>2026 —</span></div>
             <div class="list__item"><span>SkyWhale LLC — Senior UI/UX Designer, lead on Tino Super App</span><span>2025 —</span></div>
+            <div class="list__item"><span>Digital Garage LLC — Design lead, Garage.mn</span><span>2024 — 2025</span></div>
             <div class="list__item"><span>In-September Studio — UI/UX design team lead</span><span>2021 —</span></div>
             <div class="list__item"><span>Pinecone Studio — Pinecone Academy website, M-Karaoke, CarX</span><span>2022 — 23</span></div>
             <div class="list__item"><span>Pinecone Academy — UX design teacher, UX22HOP-2 cohort</span><span>2022</span></div>
@@ -972,7 +974,7 @@ const GOES_GREEN_STORY = [
   ] },
   { type: 'list', h: 'Outcome', items: [
     'A tree-care app that keeps Oyu Tolgoi’s employees connected to the trees they planted.',
-    '500 employees taking part, each looking after the trees they planted.',
+    '15,000 employees taking part, each looking after the trees they planted.',
   ] },
 ];
 const KA = 'assets/kuul/';
@@ -1026,8 +1028,8 @@ const KUUL_STORY = [
 
 // label: the record-label colour · ink: the type on it · story: the case study under the turntable
 const PROJECTS = [
-  { slug: 'kuul', title: 'Kuul', role: 'Co-founder & CDO', year: '[2025] — now', platform: 'iOS · Android', team: '', cat: 'Own product',
-    label: '#5B4BFF', ink: '#FFFFFF', logo: 'kuul', logoCover: 1.0, results: [{ k: 'Launched at', v: '[X universities]' }, { k: 'Students', v: '[N signed up]' }],
+  { slug: 'kuul', title: 'Kuul', role: 'Co-founder & CDO', year: '2026 — now', platform: 'iOS · Android', team: '', cat: 'Own product',
+    label: '#5B4BFF', ink: '#FFFFFF', logo: 'kuul', logoCover: 1.0, results: [{ k: '', v: 'Stay tuned to find out some kuul sh*' }],
     summary: "Kuul puts a student's whole campus life in one app: their timetable, their class group chats, their friends' free time, and what's happening at their university.",
     story: KUUL_STORY,
     stickers: [
@@ -1050,7 +1052,7 @@ const PROJECTS = [
     label: '#2E6BE6', ink: '#FFFFFF', logo: 'tino', logoCover: 1.06, fader: 'car', results: [{ k: 'Active users', v: 'Almost 200k' }, { k: 'Recognition', v: 'Bloomberg Awards 2025' }],
     summary: 'Tino is the super app for everyday life in Ulaanbaatar: one place to pay, ride, shop, charge your phone and more, used by almost 200,000 people.',
     story: TINO_STORY },
-  { slug: 'garage', title: 'Garage.mn', role: 'Design lead', year: '2024 — [now]', platform: 'Web · iOS · Android · POS', team: 'Digital Garage LLC', cat: 'Product design',
+  { slug: 'garage', title: 'Garage.mn', role: 'Design lead', year: '2024 — 2025', platform: 'Web · iOS · Android · POS', team: 'Digital Garage LLC', cat: 'Product design',
     label: '#EF6023', ink: '#FFFFFF', logo: 'garage', logoCover: 1.0, results: [{ k: 'Products designed', v: '9, one ecosystem' }, { k: 'Design system', v: 'One for every product' }],
     summary: 'Garage.mn is Digital Garage’s car-parts and car-care ecosystem, from a store that only shows parts that fit your car to the tools that run the business.',
     story: GARAGE_STORY },
@@ -1062,7 +1064,7 @@ const PROJECTS = [
     label: '#FF006E', ink: '#EEE000', logo: 'cheepah', logoCover: 1.0, results: [{ k: 'Downloads', v: '100,000+ on Google Play' }, { k: 'Timeline', v: '4 months, two designers' }],
     summary: 'Cheepah brings China’s online marketplaces to Mongolia in one Mongolian app. With one teammate, I designed it in four months.',
     story: CHEEPAH_STORY },
-  { slug: 'playmo', title: 'Playmo', role: 'UI/UX designer', year: '[year]', platform: 'Smart TV', team: '[Team]', cat: 'TV design',
+  { slug: 'playmo', title: 'Playmo', role: 'UI/UX designer', year: '2023', platform: 'Smart TV', team: 'Duo', cat: 'TV design',
     label: '#1F1F1F', ink: '#00C21A', logo: 'playmo', logoCover: 1.0, results: [{ k: 'Designed', v: 'Playmo’s Smart TV app' }, { k: 'Built', v: 'A design system for TV' }],
     summary: 'Playmo streams Hollywood films, K-dramas and local titles in Mongolian. I designed its Smart TV app and the design system behind it.',
     story: PLAYMO_STORY },
@@ -1070,12 +1072,12 @@ const PROJECTS = [
     label: '#0A5CFF', ink: '#FFFFFF', logo: 'mkaraoke', logoCover: 1.0, results: [{ k: 'Designed', v: 'Karaoke for Smart TVs' }, { k: 'Remote', v: 'Your phone, paired by QR' }],
     summary: 'MKaraoke, from Mmusic, brings karaoke to the living room: a Smart TV app where your phone becomes the remote. I designed it at Pinecone Studio.',
     story: MKARAOKE_STORY },
-  { slug: 'khanbogd', title: 'Khanbogd', role: 'UI/UX designer', year: '[year]', platform: 'Web', team: 'Khanbogd Iraeta LLC', cat: 'Web design',
+  { slug: 'khanbogd', title: 'Khanbogd', role: 'UI/UX designer', year: '2024', platform: 'Web', team: 'Khanbogd Iraeta LLC', cat: 'Web design',
     label: '#F07F32', ink: '#FFFFFF', logo: 'khanbogd', logoCover: 1.0, results: [{ k: 'Designed', v: 'The website, in Mongolian and English' }, { k: 'Built', v: 'A design system for the brand online' }],
     summary: 'Khanbogd Iraeta makes steel for mining, energy and heavy industry, from its factory in the Gobi. I designed its website and the design system behind it.',
     story: KHANBOGD_STORY },
   { slug: 'goes-green', title: 'Goes Green', role: 'UI/UX designer', year: '2024', platform: 'iOS · Android', team: '', cat: 'App design',
-    label: '#34B038', ink: '#FFFFFF', logo: 'goes-green', logoCover: 1.0, results: [{ k: 'Built for', v: 'Oyu Tolgoi’s employees' }, { k: 'Employees', v: '500' }],
+    label: '#34B038', ink: '#FFFFFF', logo: 'goes-green', logoCover: 1.0, results: [{ k: 'Built for', v: 'Oyu Tolgoi’s employees' }, { k: 'Employees', v: '15K' }],
     summary: 'Goes Green is a tree-planting app for Oyu Tolgoi’s employees: every employee plants a tree, then looks after it in the app.',
     story: GOES_GREEN_STORY },
 ];
@@ -1416,7 +1418,7 @@ function showProject(i) {
   $('#ctTitle').textContent = p.title;
   $('#ctRole').textContent = p.role; $('#ctYear').textContent = p.year;
   $('#ctPlatform').textContent = p.platform; $('#ctTeam').textContent = p.team; $('#ctTeam').parentElement.style.display = p.team ? '' : 'none';   // no team, no row
-  $('#results').innerHTML = p.results.map((r, k) => `<div class="result swap" style="--i:${k + 1}"><div class="label">${esc(r.k)}</div><div class="result__value">${esc(r.v)}</div></div>`).join('');
+  $('#results').innerHTML = p.results.map((r, k) => `<div class="result swap" style="--i:${k + 1}">${r.k ? `<div class="label">${esc(r.k)}</div>` : ''}<div class="result__value">${esc(r.v)}</div></div>`).join('');
   $('#count').textContent = `${String(i + 1).padStart(2, '0')} / ${String(N).padStart(2, '0')}`;
   [$('#ctTitle'), ...document.querySelectorAll('.credits__table > div')].forEach((el, k) => {
     el.style.setProperty('--i', k); el.classList.remove('swap'); void el.offsetWidth; el.classList.add('swap');
@@ -1886,7 +1888,7 @@ function fillDetail(i) {
     </section>`;
   $('#dtBody').innerHTML = `
     <p class="story__lead">${esc(p.summary || `[One paragraph on ${p.title} — what it is, who it's for, and what you were asked to solve.]`)}</p>
-    <div class="story__results">${p.results.map((r) => `<div><div class="label">${esc(r.k)}</div><div class="result__value">${esc(r.v)}</div></div>`).join('')}</div>
+    <div class="story__results">${p.results.map((r) => `<div>${r.k ? `<div class="label">${esc(r.k)}</div>` : ''}<div class="result__value">${esc(r.v)}</div></div>`).join('')}</div>
     ${p.story ? p.story.map(storyHTML).join('') : `
     ${block('The problem', '[What was broken or missing before you started? Who felt it most?]', '[Mockup — hero screen]')}
     ${block('The process', '[Research, flows, prototypes, testing — what you actually did, in order.]', '[Mockup — flows or wireframes]')}

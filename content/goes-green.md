@@ -10,7 +10,7 @@
 ## Key results
 
 - **Built for:** Oyu Tolgoi's employees
-- **Employees:** 500 taking part
+- **Employees:** 15K taking part
 
 ## Summary
 
@@ -51,4 +51,4 @@ The first version mixed teal, orange and green on heavy gradient cards. The rede
 ## Outcome
 
 - A tree-care app that keeps Oyu Tolgoi's employees connected to the trees they planted.
-- 500 employees taking part, each looking after the trees they planted.
+- 15,000 employees taking part, each looking after the trees they planted.

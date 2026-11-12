@@ -3,7 +3,7 @@
 ## Credits
 
 - **Role:** Design lead
-- **Year:** 2024 — [end year or now]
+- **Year:** 2024 — 2025
 - **Platform:** Web · iOS · Android · POS
 - **Team:** Digital Garage LLC
 - **Category:** Product design · Design system

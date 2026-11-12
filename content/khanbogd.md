@@ -3,7 +3,7 @@
 ## Credits
 
 - **Role:** UI/UX designer
-- **Year:** [year]
+- **Year:** 2024
 - **Platform:** Web
 - **Team:** Khanbogd Iraeta LLC
 - **Category:** Web Design

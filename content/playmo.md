@@ -3,9 +3,9 @@
 ## Credits
 
 - **Role:** UI/UX designer
-- **Year:** [year]
+- **Year:** 2023
 - **Platform:** Smart TV
-- **Team:** [Syscotek Playmo LLC / your team]
+- **Team:** Duo
 - **Category:** TV Design
 
 ## Key results
