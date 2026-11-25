@@ -1,0 +1,370 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tunnel — Tengis Ulzii</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=Geist:wght@400;600&family=Geist+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+  :root { --bg: #f2e4cc; --ink: #1b1712; }
+  * { box-sizing: border-box; margin: 0; }
+  html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(--ink); }
+  body { font-family: Geist, system-ui, sans-serif; touch-action: none; }
+  canvas#tunnel { position: fixed; inset: 0; width: 100%; height: 100%; display: block; }
+  .hud { position: fixed; left: 24px; right: 24px; bottom: 22px; display: flex; justify-content: space-between;
+         font: 12px/1 "Geist Mono", ui-monospace, monospace; letter-spacing: .06em; text-transform: uppercase;
+         color: rgba(27,23,18,.72); pointer-events: none; mix-blend-mode: multiply; }
+  .hint { transition: opacity .8s; }
+  .is-moving .hint { opacity: 0; }
+</style>
+</head>
+<body>
+<canvas id="tunnel"></canvas>
+<div class="hud"><span class="hint">Scroll to walk</span><span id="meter">000 m</span></div>
+
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+} }
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+
+/* ------------------------------------------------------------------ *
+ * An endless curved subway tube (after a one-point-perspective
+ * U-Bahn sketch): orange tiled walls, white panelled vault with
+ * lamps, terrazzo floor, blue poster frames for the story chapters.
+ * The path is generated as it is walked; chunks are built ahead and
+ * thrown away behind, so it never ends.
+ * ------------------------------------------------------------------ */
+
+const CHAPTERS = [
+  ['01', '[Chapter title]', '[Year]'],
+  ['02', '[Chapter title]', '[Year]'],
+  ['03', '[Chapter title]', '[Year]'],
+  ['04', '[Chapter title]', '[Year]'],
+  ['05', '[Chapter title]', '[Year]'],
+  ['06', '[Chapter title]', '[Year]'],
+];
+
+const FOG = 0xe9d6b4;
+const R = 2.4, CY = 1.4;                 // tube radius and centre height (m)
+const DS = 0.5;                          // path sample step (m)
+const CHUNK = 24;                        // chunk length (m)
+const AHEAD = 8, BEHIND = 1;             // chunks kept around the camera
+const EYE = 1.6;
+
+/* ---------- renderer / scene ---------- */
+const canvas = document.getElementById('tunnel');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 0.82;
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(FOG);
+scene.fog = new THREE.Fog(FOG, 14, 95);
+const pmrem = new THREE.PMREMGenerator(renderer);
+scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+
+const camera = new THREE.PerspectiveCamera(68, 1, 0.05, 200);
+scene.add(new THREE.HemisphereLight(0xfff3e0, 0x7a5530, 0.9));
+const lamp = new THREE.PointLight(0xfff1dc, 6, 18, 1.6);
+scene.add(lamp);
+
+/* ---------- canvas textures (1 canvas = 1 m × 1 m) ---------- */
+const maxAniso = renderer.capabilities.getMaxAnisotropy();
+function tex(draw, size = 512, colour = true) {
+  const c = document.createElement('canvas'); c.width = c.height = size;
+  draw(c.getContext('2d'), size);
+  const t = new THREE.CanvasTexture(c);
+  t.wrapS = t.wrapT = THREE.RepeatWrapping;
+  t.anisotropy = maxAniso;
+  if (colour) t.colorSpace = THREE.SRGBColorSpace;
+  return t;
+}
+const rnd = (a, b) => a + Math.random() * (b - a);
+
+// orange wall tiles: x = around the tube, y = along it
+const tileTex = tex((g, S) => {
+  g.fillStyle = '#9a5714'; g.fillRect(0, 0, S, S);           // grout
+  const cols = 8, rows = 4, gw = 3;
+  for (let i = 0; i < cols; i++) for (let j = 0; j < rows; j++) {
+    const l = rnd(-3, 3);
+    g.fillStyle = `hsl(${rnd(30, 35)}, ${rnd(84, 90)}%, ${51 + l}%)`;
+    const x = i * S / cols + gw / 2, y = j * S / rows + gw / 2, w = S / cols - gw, h = S / rows - gw;
+    g.fillRect(x, y, w, h);
+    const grd = g.createLinearGradient(x, y, x + w, y);  // a little glaze
+    grd.addColorStop(0, 'rgba(255,255,255,.10)'); grd.addColorStop(.5, 'rgba(255,255,255,0)'); grd.addColorStop(1, 'rgba(0,0,0,.06)');
+    g.fillStyle = grd; g.fillRect(x, y, w, h);
+  }
+});
+const tileRough = tex((g, S) => {
+  g.fillStyle = '#5a5a5a'; g.fillRect(0, 0, S, S);
+  g.fillStyle = '#fff';
+  for (let i = 0; i <= 8; i++) g.fillRect(i * S / 8 - 2, 0, 4, S);
+  for (let j = 0; j <= 4; j++) g.fillRect(0, j * S / 4 - 2, S, 4);
+}, 512, false);
+
+// white ceiling panels with seams and rivets
+const ceilTex = tex((g, S) => {
+  g.fillStyle = '#f3f0ea'; g.fillRect(0, 0, S, S);
+  const grd = g.createLinearGradient(0, 0, S, 0);
+  grd.addColorStop(0, 'rgba(0,0,0,.05)'); grd.addColorStop(.5, 'rgba(0,0,0,0)'); grd.addColorStop(1, 'rgba(0,0,0,.05)');
+  g.fillStyle = grd; g.fillRect(0, 0, S, S);
+  g.fillStyle = 'rgba(60,55,50,.45)';
+  g.fillRect(0, 0, S, 3); g.fillRect(0, 0, 3, S);
+  g.fillStyle = 'rgba(60,55,50,.35)';
+  for (const [x, y] of [[14, 14], [S - 14, 14], [14, S / 2], [S - 14, S / 2]]) { g.beginPath(); g.arc(x, y, 3, 0, 7); g.fill(); }
+});
+
+// terrazzo floor
+const floorTex = tex((g, S) => {
+  g.fillStyle = '#a9a398'; g.fillRect(0, 0, S, S);
+  for (let i = 0; i < 9000; i++) {
+    const v = Math.random();
+    g.fillStyle = v < .45 ? `rgba(70,62,55,${rnd(.25, .6)})` : v < .8 ? `rgba(255,255,255,${rnd(.3, .8)})` : `rgba(160,110,70,${rnd(.2, .5)})`;
+    const r = rnd(.6, 2.6); g.beginPath(); g.ellipse(rnd(0, S), rnd(0, S), r, r * rnd(.5, 1), rnd(0, 3), 0, 7); g.fill();
+  }
+  g.fillStyle = 'rgba(80,70,60,.25)'; g.fillRect(0, 0, S, 2); g.fillRect(0, 0, 2, S);
+}, 1024);
+
+const M = {
+  tile:  new THREE.MeshStandardMaterial({ map: tileTex, roughnessMap: tileRough, roughness: 1, metalness: 0, envMapIntensity: .9 }),
+  skirt: new THREE.MeshStandardMaterial({ color: 0x2d2a27, roughness: .5 }),
+  ceil:  new THREE.MeshStandardMaterial({ map: ceilTex, roughness: .55, envMapIntensity: .6, emissive: 0x4a4540 }),
+  floor: new THREE.MeshStandardMaterial({ map: floorTex, roughness: .32, envMapIntensity: .8 }),
+  edge:  new THREE.MeshStandardMaterial({ color: 0x3b3631, roughness: .6 }),
+  lamp:  new THREE.MeshBasicMaterial({ color: 0xfffaf0 }),
+  trough:new THREE.MeshStandardMaterial({ color: 0xe4e0d8, roughness: .6 }),
+  frame: new THREE.MeshStandardMaterial({ color: 0x1d4f9e, roughness: .35, metalness: .1 }),
+  roundel: new THREE.MeshStandardMaterial({ color: 0xf6f4ef, roughness: .3 }),
+  roundelRim: new THREE.MeshStandardMaterial({ color: 0x8d8a84, roughness: .3, metalness: .6 }),
+};
+
+/* ---------- posters (chapter placeholders) ---------- */
+const posterMats = [];
+function makePosters() {
+  CHAPTERS.forEach(([n, title, year], i) => {
+    const c = document.createElement('canvas'); c.width = 900; c.height = 600;
+    const g = c.getContext('2d');
+    const hue = [210, 18, 145, 45, 265, 0][i % 6];
+    g.fillStyle = `hsl(${hue}, 30%, 92%)`; g.fillRect(0, 0, 900, 600);
+    g.fillStyle = `hsl(${hue}, 45%, 30%)`;
+    g.font = '400 300px "Instrument Serif"'; g.textBaseline = 'alphabetic';
+    g.fillText(n, 48, 330);
+    g.font = '400 64px "Instrument Serif"'; g.fillText(title, 52, 470);
+    g.font = '400 26px "Geist Mono"'; g.fillText(year.toUpperCase(), 56, 540);
+    g.fillText('CHAPTER', 640, 80);
+    const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = maxAniso;
+    posterMats.push(new THREE.MeshStandardMaterial({ map: t, roughness: .25, envMapIntensity: .7 }));
+  });
+}
+
+/* ---------- endless path (XZ plane; heading h, forward = (sin h, 0, -cos h)) ---------- */
+const PX = [0], PZ = [0], PH = [0];
+let piece = { left: 40, k: 0 };                       // a straight start
+function extendPath(toS) {
+  while ((PX.length - 1) * DS < toS) {
+    if (piece.left <= 0) {
+      const bend = Math.random() < .72;
+      piece = { left: bend ? rnd(25, 55) : rnd(12, 30),
+                k: bend ? (Math.random() < .5 ? -1 : 1) * rnd(1 / 55, 1 / 24) : 0 };
+    }
+    const i = PX.length - 1, h = PH[i] + piece.k * DS;
+    PH.push(h); PX.push(PX[i] + Math.sin(h) * DS); PZ.push(PZ[i] - Math.cos(h) * DS);
+    piece.left -= DS;
+  }
+}
+function pathAt(s) {
+  extendPath(s + 2);
+  const f = Math.max(0, s / DS), i = Math.floor(f), t = f - i;
+  const h = PH[i] + (PH[i + 1] - PH[i]) * t;
+  return { x: PX[i] + (PX[i + 1] - PX[i]) * t, z: PZ[i] + (PZ[i + 1] - PZ[i]) * t, h };
+}
+
+/* ---------- cross-section profiles (local x = right, y = up), counter-clockwise ---------- */
+const FLOOR_X = Math.sqrt(R * R - CY * CY);
+const A0 = -Math.asin(CY / R);                        // where the wall meets the floor
+const deg = Math.PI / 180;
+function arc(a1, a2, n) {
+  const pts = [];
+  for (let i = 0; i <= n; i++) {
+    const a = a1 + (a2 - a1) * i / n;
+    pts.push({ x: R * Math.cos(a), y: CY + R * Math.sin(a), nx: -Math.cos(a), ny: -Math.sin(a) });
+  }
+  return pts;
+}
+const SK = 0.05;                                      // skirting, in radians of arc
+const PROFILES = [
+  { mat: 'floor', pts: [{ x: -FLOOR_X + .12, y: 0, nx: 0, ny: 1 }, { x: FLOOR_X - .12, y: 0, nx: 0, ny: 1 }] },
+  { mat: 'edge',  pts: [{ x: FLOOR_X - .12, y: 0, nx: 0, ny: 1 }, { x: FLOOR_X, y: 0, nx: 0, ny: 1 }] },
+  { mat: 'edge',  pts: [{ x: -FLOOR_X, y: 0, nx: 0, ny: 1 }, { x: -FLOOR_X + .12, y: 0, nx: 0, ny: 1 }] },
+  { mat: 'skirt', pts: arc(A0, A0 + SK, 2) },
+  { mat: 'tile',  pts: arc(A0 + SK, 48 * deg, 22) },
+  { mat: 'ceil',  pts: arc(48 * deg, 132 * deg, 26) },
+  { mat: 'tile',  pts: arc(132 * deg, Math.PI - A0 - SK, 22) },
+  { mat: 'skirt', pts: arc(Math.PI - A0 - SK, Math.PI - A0, 2) },
+];
+// distance along each profile, used as a texture coordinate (metres)
+for (const p of PROFILES) { let d = 0; p.pts.forEach((q, i) => { if (i) d += Math.hypot(q.x - p.pts[i - 1].x, q.y - p.pts[i - 1].y); q.u = d; }); }
+
+function sweep(profile, i0, i1) {
+  const pts = profile.pts, np = pts.length, ns = i1 - i0 + 1;
+  const pos = new Float32Array(np * ns * 3), nor = new Float32Array(np * ns * 3), uv = new Float32Array(np * ns * 2);
+  let k = 0, m = 0;
+  for (let j = 0; j < ns; j++) {
+    const s = i0 + j, h = PH[s], rx = Math.cos(h), rz = Math.sin(h);
+    for (const q of pts) {
+      pos[k] = PX[s] + rx * q.x; pos[k + 1] = q.y; pos[k + 2] = PZ[s] + rz * q.x;
+      nor[k] = rx * q.nx; nor[k + 1] = q.ny; nor[k + 2] = rz * q.nx;
+      uv[m] = q.u; uv[m + 1] = s * DS;
+      k += 3; m += 2;
+    }
+  }
+  const idx = [];
+  for (let j = 0; j < ns - 1; j++) for (let i = 0; i < np - 1; i++) {
+    const a = j * np + i, b = a + 1, c = a + np, d = c + 1;
+    idx.push(a, b, c, b, d, c);
+  }
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+  g.setAttribute('normal', new THREE.BufferAttribute(nor, 3));
+  g.setAttribute('uv', new THREE.BufferAttribute(uv, 2));
+  g.setIndex(idx);
+  return g;
+}
+
+/* ---------- props placed in the tube's frame ---------- */
+const lampGeo = new THREE.BoxGeometry(.16, .05, 1.3);
+const troughGeo = new THREE.BoxGeometry(.34, .1, CHUNK + .02);
+const frameGeo = new THREE.BoxGeometry(1.86, 1.26, .06);
+const posterGeo = new THREE.PlaneGeometry(1.7, 1.13);
+const roundelGeo = new THREE.CylinderGeometry(.3, .3, .1, 40);
+const roundelRimGeo = new THREE.TorusGeometry(.3, .03, 10, 40);
+
+function place(obj, s, x, y, faceIn = 0, tilt = 0) {
+  const i = Math.min(PX.length - 1, Math.round(s / DS)), h = PH[i];
+  obj.position.set(PX[i] + Math.cos(h) * x, y, PZ[i] + Math.sin(h) * x);
+  obj.rotation.set(0, -h, 0, 'YXZ');
+  if (faceIn) obj.rotateY(faceIn > 0 ? -Math.PI / 2 : Math.PI / 2);
+  if (tilt) obj.rotateX(tilt);
+  return obj;
+}
+
+let posterCount = 0;
+const chunks = new Map();
+function buildChunk(n) {
+  const s0 = n * CHUNK, s1 = s0 + CHUNK;
+  extendPath(s1 + 1);
+  const i0 = Math.round(s0 / DS), i1 = Math.round(s1 / DS);
+  const group = new THREE.Group();
+  for (const p of PROFILES) group.add(new THREE.Mesh(sweep(p, i0, i1), M[p.mat]));
+
+  // two rows of lamps up in the vault, every 2.4 m
+  const ya = 76 * deg, yb = 104 * deg;
+  for (let s = s0 + 1.2; s < s1; s += 2.4) for (const a of [ya, yb]) {
+    const x = (R - .04) * Math.cos(a), y = CY + (R - .04) * Math.sin(a);
+    group.add(place(new THREE.Mesh(lampGeo, M.lamp), s, x, y).rotateZ(a - Math.PI / 2));
+  }
+  // cable trough along the crown (one per chunk, slightly curved path is fine at this length)
+
+  // posters: alternate walls, every 8 m, with a roundel between some
+  for (let s = s0 + 4; s < s1; s += 8) {
+    const side = (Math.round(s / 8) % 2) ? 1 : -1;
+    const a = -0.06, wx = side * (R * Math.cos(a) - .05);
+    const frame = place(new THREE.Mesh(frameGeo, M.frame), s, wx, 1.35, side);
+    const poster = place(new THREE.Mesh(posterGeo, posterMats[posterCount++ % posterMats.length]), s, wx - side * .035, 1.35, side);
+    group.add(frame, poster);
+    if (Math.random() < .55) {
+      const rs = s + 4, rx = -side * (R * Math.cos(-.2) - .08);
+      const disc = place(new THREE.Mesh(roundelGeo, M.roundel), rs, rx, 1.0, -side);
+      disc.rotateX(Math.PI / 2);
+      const rim = place(new THREE.Mesh(roundelRimGeo, M.roundelRim), rs, rx - side * -.05, 1.0, -side);
+      group.add(disc, rim);
+    }
+  }
+  scene.add(group);
+  chunks.set(n, group);
+}
+function dropChunk(n) {
+  const g = chunks.get(n); if (!g) return;
+  g.traverse(o => { if (o.isMesh && o.geometry && ![lampGeo, troughGeo, frameGeo, posterGeo, roundelGeo, roundelRimGeo].includes(o.geometry)) o.geometry.dispose(); });
+  scene.remove(g); chunks.delete(n);
+}
+function syncChunks(s) {
+  const c = Math.floor(s / CHUNK);
+  for (let n = Math.max(0, c - BEHIND); n <= c + AHEAD; n++) if (!chunks.has(n)) buildChunk(n);
+  for (const n of [...chunks.keys()]) if (n < c - BEHIND || n > c + AHEAD) dropChunk(n);
+}
+
+/* ---------- walking ---------- */
+let s = 6, vel = 0, target = 0, idle = 0.9;          // m, m/s
+const look = { x: 0, y: 0, tx: 0, ty: 0 };
+addEventListener('wheel', e => { e.preventDefault(); target += e.deltaY * 0.035; mark(); }, { passive: false });
+let touchY = null;
+addEventListener('touchstart', e => { touchY = e.touches[0].clientY; }, { passive: true });
+addEventListener('touchmove', e => { if (touchY == null) return; const y = e.touches[0].clientY; target += (touchY - y) * 0.09; touchY = y; mark(); }, { passive: true });
+addEventListener('touchend', () => { touchY = null; });
+addEventListener('keydown', e => {
+  if (['ArrowDown', 'ArrowUp', ' ', 'PageDown', 'PageUp'].includes(e.key)) e.preventDefault();
+  if (e.key === 'ArrowDown' || e.key === ' ' || e.key === 'PageDown') { target += 6; mark(); }
+  if (e.key === 'ArrowUp' || e.key === 'PageUp') { target -= 6; mark(); }
+});
+addEventListener('pointermove', e => {
+  if (e.pointerType !== 'mouse') return;
+  look.tx = (e.clientX / innerWidth - .5) * -0.35;
+  look.ty = (e.clientY / innerHeight - .5) * -0.18;
+});
+function mark() { document.body.classList.add('is-moving'); }
+
+function resize() {
+  const w = innerWidth, h = innerHeight;
+  renderer.setSize(w, h, false);
+  camera.aspect = w / h;
+  camera.fov = w / h < .8 ? 82 : 68;
+  camera.updateProjectionMatrix();
+}
+addEventListener('resize', resize); resize();
+
+const meter = document.getElementById('meter');
+const tmp = new THREE.Vector3();
+let last = performance.now();
+const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+if (reduced) idle = 0;
+
+function frame(now) {
+  const dt = Math.min(.05, (now - last) / 1000); last = now;
+  // scroll input feeds a target distance; we ease toward it, plus a slow idle drift forward
+  const take = target * (1 - Math.exp(-dt * 3.2));
+  target -= take;
+  vel += ((take / Math.max(dt, 1e-3)) - vel) * (1 - Math.exp(-dt * 6));
+  s = Math.max(2, s + take + idle * dt);
+
+  const p = pathAt(s), q = pathAt(s + 7);
+  const sway = Math.sin(s * 1.15) * 0.012 * Math.min(1, Math.abs(vel) / 4);
+  camera.position.set(p.x, EYE + sway, p.z);
+  look.x += (look.tx - look.x) * (1 - Math.exp(-dt * 3));
+  look.y += (look.ty - look.y) * (1 - Math.exp(-dt * 3));
+  // look ahead along the bend, then add the mouse offset
+  const yaw = Math.atan2(q.x - p.x, -(q.z - p.z));
+  camera.rotation.set(look.y - 0.02, -yaw + look.x, 0, 'YXZ');
+
+  tmp.set(Math.sin(yaw), 0, -Math.cos(yaw)).multiplyScalar(3);
+  lamp.position.set(p.x + tmp.x, 2.3, p.z + tmp.z);
+
+  syncChunks(s);
+  meter.textContent = String(Math.floor(s)).padStart(3, '0') + ' m';
+  renderer.render(scene, camera);
+  requestAnimationFrame(frame);
+}
+
+document.fonts.ready.then(() => { makePosters(); requestAnimationFrame(frame); });
+</script>
+</body>
+</html>
